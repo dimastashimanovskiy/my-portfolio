@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Управление проектами — Портфолио</title>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="assets/logo-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+<style>
+  .admin-wrap { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+  .admin-header { display:flex; align-items:center; justify-content:space-between; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
+  .admin-header h1 { font-size: 24px; }
+  .warning-box {
+    background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.35);
+    color: #eab308; border-radius: var(--radius-sm); padding: 14px 18px; font-size: 13.5px; margin-bottom: 26px;
+    line-height: 1.6;
+  }
+  .warning-box strong { color: #facc15; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .form-grid .full { grid-column: 1 / -1; }
+  .field label { display:block; font-size: 12.5px; color: var(--text-dim); margin-bottom: 6px; font-weight: 600; }
+  .field input, .field textarea, .field select {
+    width: 100%; padding: 11px 14px; border-radius: var(--radius-sm);
+    background: var(--bg-soft); border: 1px solid var(--panel-border-strong); color: var(--text);
+    font-family: inherit; font-size: 14px;
+  }
+  .field textarea { min-height: 70px; resize: vertical; }
+  .image-preview { margin-top: 10px; width: 100%; max-width: 220px; aspect-ratio: 16/10; border-radius: 10px; overflow: hidden; background: var(--bg-soft); border: 1px dashed var(--panel-border-strong); display:grid; place-items:center; font-size: 12px; color: var(--text-dimmer); }
+  .image-preview img { width: 100%; height: 100%; object-fit: cover; }
+  .btn-row { display:flex; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+  .admin-list { margin-top: 34px; display: flex; flex-direction: column; gap: 12px; }
+  .admin-item { display:flex; gap:14px; align-items:center; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--panel-border); background: var(--panel); }
+  .admin-item .thumb { width: 70px; height: 50px; border-radius: 8px; overflow:hidden; background: var(--bg-soft); flex-shrink:0; display:grid; place-items:center; font-size:10px; color:var(--text-dimmer); }
+  .admin-item .thumb img { width:100%; height:100%; object-fit:cover; }
+  .admin-item .info { flex: 1; min-width:0; }
+  .admin-item .info h4 { font-size: 14px; margin-bottom: 2px; }
+  .admin-item .info p { font-size: 12.5px; color: var(--text-dimmer); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .admin-item .actions { display:flex; gap:8px; }
+  .small-btn { padding: 7px 12px; font-size: 12.5px; border-radius: 8px; border: 1px solid var(--panel-border-strong); background: transparent; color: var(--text); }
+  .small-btn.danger:hover { border-color: #f87171; color: #f87171; }
+  .small-btn.edit:hover { border-color: var(--accent); color: var(--accent); }
+  textarea#jsonBox { width: 100%; min-height: 220px; font-family: monospace; font-size: 12.5px; background: var(--bg-soft); border: 1px solid var(--panel-border-strong); border-radius: var(--radius-sm); color: var(--text); padding: 14px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand"><img src="assets/logo-icon.png" alt="Логотип" width="40" height="40" style="border-radius:11px;" /><span>Управление проектами</span></div>
+    <div class="header-actions">
+      <a class="btn btn-outline" href="index.html">← Вернуться на сайт</a>
+      <button class="icon-btn" id="themeToggle" aria-label="Тема">
+        <svg viewBox="0 0 24 24" fill="none" width="17" height="17"><path d="M12 3v1M12 20v1M4.2 4.2l.7.7M19.1 19.1l.7.7M3 12h1M20 12h1M4.2 19.8l.7-.7M19.1 4.9l.7-.7M12 8a4 4 0 100 8 4 4 0 000-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="admin-wrap">
+  <div class="admin-header">
+    <h1>Добавить / редактировать проекты</h1>
+  </div>
+
+  <div class="warning-box">
+    <strong>Важно:</strong> этот сайт статический (GitHub Pages), поэтому у него нет базы данных на сервере.
+    Проекты, которые вы добавляете здесь, сохраняются в памяти <strong>этого браузера</strong> (localStorage) и видны
+    только вам на этом устройстве — посетители сайта их не увидят. Чтобы проекты появились у всех, нажмите
+    «Экспортировать в config.js» внизу, скопируйте код и вставьте его в файл <code>config.js</code> в разделе
+    <code>projects</code>, затем загрузите изменения на GitHub (commit + push).
+  </div>
+
+  <form id="projectForm" class="panel">
+    <input type="hidden" id="editIndex" value="-1" />
+    <div class="form-grid">
+      <div class="field"><label>Название проекта *</label><input type="text" id="pTitle" required placeholder="Например, FinTrack Dashboard" /></div>
+      <div class="field"><label>Категория</label><input type="text" id="pCategory" placeholder="Full Stack / Web App / Frontend" /></div>
+      <div class="field full"><label>Описание</label><textarea id="pDescription" placeholder="Короткое описание проекта"></textarea></div>
+      <div class="field"><label>Технологии (через запятую)</label><input type="text" id="pTags" placeholder="React, Node.js, MongoDB" /></div>
+      <div class="field"><label>Ссылка на проект</label><input type="text" id="pLink" placeholder="https://..." /></div>
+      <div class="field full">
+        <label>Изображение проекта</label>
+        <input type="file" id="pImageFile" accept="image/*" />
+        <div class="image-preview" id="pImagePreview">Нет изображения</div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button type="submit" class="btn btn-primary">Сохранить проект</button>
+      <button type="button" class="btn btn-outline" id="cancelEdit" style="display:none;">Отменить редактирование</button>
+    </div>
+  </form>
+
+  <div class="admin-list" id="adminList"></div>
+
+  <div class="panel" style="margin-top: 34px;">
+    <div class="panel-head"><h3>Экспорт данных</h3></div>
+    <p style="font-size:13.5px; color:var(--text-dim); margin-bottom:14px;">
+      Скопируйте код ниже и замените массив <code>projects: [...]</code> внутри <code>config.js</code> на этот код,
+      чтобы изменения стали видны всем посетителям сайта после публикации на GitHub.
+    </p>
+    <textarea id="jsonBox" readonly></textarea>
+    <div class="btn-row">
+      <button class="btn btn-outline" id="copyJsonBtn">Скопировать код</button>
+      <button class="btn btn-outline" id="refreshJsonBtn">Обновить</button>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+  const STORAGE_KEY = "portfolio_projects";
+  let currentImageData = "";
+
+  function loadProjects() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if (Array.isArray(stored)) return stored;
+    } catch (e) {}
+    return (SITE_CONFIG.projects || []).slice();
+  }
+  function saveProjects(list) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    renderList();
+    refreshJson();
+  }
+
+  function renderList() {
+    const list = loadProjects();
+    const wrap = document.getElementById("adminList");
+    if (!list.length) {
+      wrap.innerHTML = `<p style="color:var(--text-dimmer); font-size:13.5px;">Проектов пока нет — добавьте первый через форму выше.</p>`;
+      return;
+    }
+    wrap.innerHTML = list.map((p, i) => `
+      <div class="admin-item">
+        <div class="thumb">${p.image ? `<img src="${p.image}" alt="">` : "нет фото"}</div>
+        <div class="info">
+          <h4>${p.title}</h4>
+          <p>${(p.tags || []).join(", ") || p.category || ""}</p>
+        </div>
+        <div class="actions">
+          <button class="small-btn edit" data-edit="${i}">Изменить</button>
+          <button class="small-btn danger" data-del="${i}">Удалить</button>
+        </div>
+      </div>
+    `).join("");
+
+    wrap.querySelectorAll("[data-edit]").forEach((btn) =>
+      btn.addEventListener("click", () => editProject(parseInt(btn.dataset.edit)))
+    );
+    wrap.querySelectorAll("[data-del]").forEach((btn) =>
+      btn.addEventListener("click", () => {
+        if (confirm("Удалить этот проект?")) {
+          const list = loadProjects();
+          list.splice(parseInt(btn.dataset.del), 1);
+          saveProjects(list);
+        }
+      })
+    );
+  }
+
+  function editProject(index) {
+    const list = loadProjects();
+    const p = list[index];
+    document.getElementById("editIndex").value = index;
+    document.getElementById("pTitle").value = p.title || "";
+    document.getElementById("pCategory").value = p.category || "";
+    document.getElementById("pDescription").value = p.description || "";
+    document.getElementById("pTags").value = (p.tags || []).join(", ");
+    document.getElementById("pLink").value = p.link || "";
+    currentImageData = p.image || "";
+    const preview = document.getElementById("pImagePreview");
+    preview.innerHTML = currentImageData ? `<img src="${currentImageData}" alt="">` : "Нет изображения";
+    document.getElementById("cancelEdit").style.display = "inline-flex";
+    document.getElementById("projectForm").scrollIntoView({ behavior: "smooth" });
+  }
+
+  document.getElementById("cancelEdit").addEventListener("click", () => {
+    document.getElementById("projectForm").reset();
+    document.getElementById("editIndex").value = -1;
+    currentImageData = "";
+    document.getElementById("pImagePreview").innerHTML = "Нет изображения";
+    document.getElementById("cancelEdit").style.display = "none";
+  });
+
+  document.getElementById("pImageFile").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      currentImageData = reader.result;
+      document.getElementById("pImagePreview").innerHTML = `<img src="${currentImageData}" alt="">`;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById("projectForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const list = loadProjects();
+    const idx = parseInt(document.getElementById("editIndex").value);
+    const project = {
+      title: document.getElementById("pTitle").value.trim(),
+      category: document.getElementById("pCategory").value.trim(),
+      description: document.getElementById("pDescription").value.trim(),
+      tags: document.getElementById("pTags").value.split(",").map((t) => t.trim()).filter(Boolean),
+      link: document.getElementById("pLink").value.trim() || "#",
+      image: currentImageData,
+    };
+    if (idx >= 0) list[idx] = project;
+    else list.push(project);
+    saveProjects(list);
+    e.target.reset();
+    document.getElementById("editIndex").value = -1;
+    currentImageData = "";
+    document.getElementById("pImagePreview").innerHTML = "Нет изображения";
+    document.getElementById("cancelEdit").style.display = "none";
+  });
+
+  function refreshJson() {
+    const list = loadProjects();
+    const code = "projects: " + JSON.stringify(list, null, 2).replace(/"([a-zA-Z0-9_]+)":/g, "$1:") + ",";
+    document.getElementById("jsonBox").value = code;
+  }
+  document.getElementById("refreshJsonBtn").addEventListener("click", refreshJson);
+  document.getElementById("copyJsonBtn").addEventListener("click", () => {
+    const box = document.getElementById("jsonBox");
+    box.select();
+    document.execCommand("copy");
+    const btn = document.getElementById("copyJsonBtn");
+    const old = btn.textContent;
+    btn.textContent = "Скопировано!";
+    setTimeout(() => (btn.textContent = old), 1500);
+  });
+
+  document.getElementById("themeToggle").addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+    const next = current === "light" ? "dark" : "light";
+    if (next === "light") document.documentElement.setAttribute("data-theme", "light");
+    else document.documentElement.removeAttribute("data-theme");
+    localStorage.setItem("portfolio_theme", next);
+  });
+  const savedTheme = localStorage.getItem("portfolio_theme");
+  if (savedTheme === "light") document.documentElement.setAttribute("data-theme", "light");
+
+  renderList();
+  refreshJson();
+</script>
+</body>
+</html>
