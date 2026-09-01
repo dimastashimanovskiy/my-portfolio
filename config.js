@@ -8,7 +8,7 @@ const SITE_CONFIG = {
 
   // ---------- Hero-блок ----------
   heroTitleLine1: "Превращаю идеи",
-  heroTitleAccent: "в код </>",
+  heroTitleAccent: "в код &lt;&#47;&gt; ",
   heroTitleLine2: "который работает",
   heroText:
     "Привет, я Дмитрий — веб-разработчик из Минска. Проектирую и запускаю сайты, интернет-магазины и Telegram-ботов под ключ. Работаю с Python, JavaScript, SQL и 1С:Предприятие.",
