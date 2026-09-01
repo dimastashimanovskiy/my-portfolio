@@ -25,7 +25,7 @@ const ICONS = {
   pen: '<svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   code2: '<svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M8 9l-4 4 4 4M16 9l4 4-4 4M14 5l-4 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   check: '<svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  rocket: '<svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z" stroke="currentColor" stroke-width="1.7"/><path d="M12 15l-3-3a22 22 0 016.4-11.4 22 22 0 018.6-2.6 22 22 0 01-2.6 8.6A22 22 0 0112 15z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>',
+  rocket: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16"> <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/> </svg>',
 };
 
 const PROCESS_ICON_KEYS = ["search", "file", "pen", "code2", "check", "rocket"];
