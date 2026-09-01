@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Дмитрий Шиман — Портфолио</title>
+<meta name="description" content="Портфолио веб-разработчика Дмитрия Шимана" />
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" href="assets/logo-icon.png">
+<link rel="apple-touch-icon" href="assets/favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="scroll-progress" id="scrollProgress"></div>
+  <div class="header-inner">
+    <div class="brand">
+      <img src="assets/logo-icon.png" alt="Логотип" width="40" height="40" style="border-radius:11px;" />
+      <span id="brandName">Дмитрий Шиман</span>
+    </div>
+
+    <nav class="main-nav" id="mainNav">
+      <a href="#home" class="active">Главная</a>
+      <a href="#about">Обо мне</a>
+      <a href="#skills">Навыки</a>
+      <a href="#experience">Опыт</a>
+      <a href="#projects">Проекты</a>
+      <a href="#process">Процесс</a>
+      <a href="#testimonials">Отзывы</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+
+    <div class="header-actions">
+      <a class="btn btn-primary" id="cvBtn" href="#" download>
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Резюме</span>
+      </a>
+      <button class="icon-btn" id="themeToggle" aria-label="Переключить тему">
+        <svg viewBox="0 0 24 24" fill="none" width="17" height="17"><path d="M12 3v1M12 20v1M4.2 4.2l.7.7M19.1 19.1l.7.7M3 12h1M20 12h1M4.2 19.8l.7-.7M19.1 4.9l.7-.7M12 8a4 4 0 100 8 4 4 0 000-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn nav-toggle" id="navToggle" aria-label="Меню">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <button class="icon-btn close-btn" id="mobileNavClose" aria-label="Закрыть меню">✕</button>
+  <a href="#home">Главная</a>
+  <a href="#about">Обо мне</a>
+  <a href="#skills">Навыки</a>
+  <a href="#experience">Опыт</a>
+  <a href="#projects">Проекты</a>
+  <a href="#process">Процесс</a>
+  <a href="#testimonials">Отзывы</a>
+  <a href="#contact">Контакты</a>
+</div>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="badge"><span class="dot"></span><span id="heroRole">Full-stack разработчик</span></span>
+        <h1 id="heroTitle">Я создаю цифровые <span class="accent">продукты</span><br>которые важны.</h1>
+        <p class="hero-text" id="heroText">Текст о себе.</p>
+        <div class="hero-cta">
+          <a href="#projects" class="btn btn-primary">Посмотреть работы
+            <svg viewBox="0 0 24 24" fill="none" width="15" height="15"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#contact" class="btn btn-outline">Связаться
+            <svg viewBox="0 0 24 24" fill="none" width="15" height="15"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <div class="social-row" id="socialRow"></div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-photo-col">
+          <div class="hero-photo-frame" id="heroPhotoFrame">
+            <div class="placeholder-face">Ваше фото<br><span style="font-size:12px">замените heroImage в config.js</span></div>
+          </div>
+          <div class="hero-approach-strip">
+            <span class="head">&lt;/&gt; Подход:</span>
+            <ul id="heroBadgesList"></ul>
+          </div>
+        </div>
+        <div class="floating-stats" id="floatingStats"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT + SKILLS -->
+  <section id="about">
+    <div class="wrap two-col">
+      <div class="panel reveal">
+        <div class="panel-head">
+          <h3><span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Обо мне</h3>
+        </div>
+        <p id="aboutText" style="color:var(--text-dim); font-size:14.5px;"></p>
+        <div class="about-fields-grid">
+          <div class="about-field">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <div><div class="k">Имя</div><div class="v" id="aboutName"></div></div>
+          </div>
+          <div class="about-field">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-6.2-7-11a7 7 0 1114 0c0 4.8-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>
+            <div><div class="k">Локация</div><div class="v" id="aboutLocation"></div></div>
+          </div>
+          <div class="about-field">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="2"/></svg>
+            <div><div class="k">Email</div><div class="v" id="aboutEmail"></div></div>
+          </div>
+          <div class="about-field">
+            <svg viewBox="0 0 24 24" fill="none" class="availability-dot"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>
+            <div><div class="k">Доступность</div><div class="v" id="aboutAvailability" style="color:var(--success)"></div></div>
+          </div>
+        </div>
+        <a href="#contact" class="btn btn-outline">Подробнее обо мне
+          <svg viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="panel reveal" id="skills">
+        <div class="panel-head">
+          <h3><span class="icon-wrap">&lt;/&gt;</span>Мои навыки</h3>
+        </div>
+        <div id="skillsList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="wrap panel reveal">
+      <div class="panel-head">
+        <h3><span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><rect x="3" y="7" width="18" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" stroke-width="2"/></svg></span>Опыт работы</h3>
+      </div>
+      <div class="timeline" id="experienceList"></div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2><span class="icon-wrap" style="display:inline-grid"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/></svg></span>Избранные проекты</h2>
+      </div>
+      <div class="projects-scroller">
+        <button class="projects-arrow prev" id="projectsPrev" aria-label="Прокрутить влево">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="projects-grid" id="projectsGrid"></div>
+        <button class="projects-arrow next" id="projectsNext" aria-label="Прокрутить вправо">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="wrap panel reveal">
+      <div class="panel-head">
+        <h3><span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Мой процесс работы</h3>
+      </div>
+      <div class="process-track" id="processTrack"></div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS + NUMBERS -->
+  <section id="testimonials">
+    <div class="wrap">
+      <div class="panel social-proof-panel reveal">
+        <div class="social-proof-top">
+          <div class="panel-head" style="margin-bottom: 6px;">
+            <h3><span class="icon-wrap" style="font-size:18px;">"</span>Отзывы клиентов</h3>
+          </div>
+          <div class="testimonial-quote-mark">"</div>
+          <div id="testimonialSlot"></div>
+          <div class="testimonial-dots" id="testimonialDots"></div>
+        </div>
+        <div class="social-proof-divider"></div>
+        <div class="social-proof-bottom">
+          <div class="panel-head" style="margin-bottom: 16px;">
+            <h3><span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M3 20h18M6 20V10M12 20V4M18 20v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>В цифрах</h3>
+          </div>
+          <div class="numbers-grid" id="numbersGrid"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="contact-cta reveal">
+        <div class="contact-cta-grid">
+          <div class="contact-cta-inner">
+            <span class="contact-availability"><span class="dot"></span><span id="contactAvailability">Открыт для предложений</span></span>
+            <h2 id="contactHeading"></h2>
+            <p class="lead" id="contactText"></p>
+            <div class="contact-actions">
+              <a href="#" id="contactEmailBtn" class="btn btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="2"/></svg>
+                Написать на email
+              </a>
+              <span class="copy-toast" id="copyToast">Email скопирован</span>
+              <a href="#" id="contactTelegramBtn" class="btn btn-outline" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M22 5.9c-.15.28-.06.62.2.8L15.6 20.4a1 1 0 01-1.75-.1l-2.7-6-6-2.7a1 1 0 01-.1-1.75L21.3 3.9c.68-.34 1.42.4 1.08 1.08z"/></svg>
+                Telegram
+              </a>
+            </div>
+            <div class="contact-chips">
+              <div class="contact-chip">
+                <span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="2"/></svg></span>
+                <span class="v" id="contactEmail"></span>
+              </div>
+              <div class="contact-chip">
+                <span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.8 19.8 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.8 19.8 0 012.11 4.18 2 2 0 014.09 2h3a2 2 0 012 1.72c.13.99.36 1.96.68 2.89a2 2 0 01-.45 2.11L8.1 9.9a16 16 0 006 6l1.18-1.18a2 2 0 012.11-.45 12.8 12.8 0 002.89.68A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2"/></svg></span>
+                <span class="v" id="contactPhone"></span>
+              </div>
+              <div class="contact-chip">
+                <span class="icon-wrap"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-6.2-7-11a7 7 0 1114 0c0 4.8-7 11-7 11z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg></span>
+                <span class="v" id="contactLocation"></span>
+              </div>
+            </div>
+          </div>
+
+          <form class="contact-form-card" 
+      action="https://formspree.io/f/xkjnjdnv" 
+      method="POST"
+      id="contactForm">
+  <h3>Или напишите прямо здесь</h3>
+  <p class="contact-form-note">Письмо придёт мне на почту напрямую</p>
+  
+  <!-- Скрытое поле для защиты от спама (опционально) -->
+  <input type="text" name="_gotcha" style="display:none" />
+  
+  <label>
+    <span>Имя</span>
+    <input type="text" name="name" placeholder="Как к вам обращаться" required />
+  </label>
+  <label>
+    <span>Email</span>
+    <input type="email" name="email" placeholder="Куда ответить" required />
+  </label>
+  <label>
+    <span>Сообщение</span>
+    <textarea name="message" placeholder="Расскажите о задаче или вакансии" required></textarea>
+  </label>
+  
+  <button type="submit" class="btn btn-primary" id="contactFormSubmit">
+    <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+      <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Отправить сообщение
+  </button>
+  
+  <p class="contact-form-status" id="contactFormStatus"></p>
+</form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="assets/logo-icon.png" alt="Логотип" />
+        <span id="footerName">Дмитрий Шиман</span>
+      </div>
+      <div class="footer-socials" id="footerSocials"></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="footerYear"></span> <span class="studio">Shyman_Studio</span>. Все права защищены.</span>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Наверх">
+  <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
