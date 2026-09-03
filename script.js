@@ -1,8 +1,3 @@
-/* ===========================================================
-   Логика сайта. Обычно этот файл менять не нужно —
-   все тексты и данные редактируются в config.js
-   =========================================================== */
-
 const ICONS = {
   code: '<svg viewBox="0 0 24 24" fill="none" width="15" height="15"><path d="M8 9l-4 4 4 4M16 9l4 4-4 4M14 5l-4 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   layers: '<svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 3l9 5-9 5-9-5 9-5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M3 13l9 5 9-5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
