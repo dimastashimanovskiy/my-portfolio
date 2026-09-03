@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Моя статистика — Дмитрий Шиман</title>
+<meta name="description" content="Детальная статистика и аналитика работы веб-разработчика" />
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+<style>
+/* Компактная статистика */
+.stats-hero {
+  padding: 80px 0 40px;
+  text-align: center;
+}
+
+.stats-hero h1 {
+  font-size: clamp(32px, 4vw, 44px);
+  margin-bottom: 12px;
+}
+
+.stats-hero .lead {
+  font-size: 15px;
+  color: var(--text-dim);
+  max-width: 500px;
+  margin: 0 auto 24px;
+}
+
+/* Компактная сетка метрик */
+.mini-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.mini-stat {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 16px 14px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.mini-stat:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.mini-stat-value {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.mini-stat-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+/* Двухколоночная сетка для графиков */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.chart-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  min-height: 280px;
+}
+
+.chart-card.full {
+  grid-column: 1 / -1;
+}
+
+.chart-card.small {
+  min-height: 200px;
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.chart-title {
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chart-subtitle {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.chart-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.chart-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Столбчатая диаграмма */
+.bar-chart-mini {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 220px;
+  position: relative;
+}
+
+.bar-mini {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.bar-fill-mini {
+  width: 100%;
+  background: linear-gradient(180deg, #22d3ee, #0891b2);
+  border-radius: 6px 6px 0 0;
+  transition: all 0.6s ease;
+  cursor: pointer;
+  position: relative;
+  min-height: 20px;
+}
+
+.bar-fill-mini:hover {
+  opacity: 0.8;
+  filter: brightness(1.2);
+}
+
+.bar-value-mini {
+  position: absolute;
+  top: -20px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.bar-fill-mini:hover .bar-value-mini {
+  opacity: 1;
+}
+
+.bar-label-mini {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+/* Круговая диаграмма */
+.pie-mini {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.pie-chart-mini {
+  width: 140px;
+  height: 140px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.pie-legend-mini {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.legend-item-mini {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.legend-item-mini:hover {
+  background: var(--accent-soft);
+}
+
+.legend-color-mini {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.legend-label-mini {
+  flex: 1;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.legend-value-mini {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Линейный график */
+.line-chart-mini {
+  height: 160px;
+  position: relative;
+}
+
+.chart-grid-lines {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.grid-line {
+  height: 1px;
+  background: var(--panel-border);
+  position: relative;
+}
+
+.grid-label {
+  position: absolute;
+  right: 100%;
+  margin-right: 8px;
+  top: -8px;
+  font-size: 10px;
+  color: var(--text-dimmer);
+}
+
+/* Прогресс бары */
+.progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.progress-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.progress-name {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.progress-value {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.progress-bar {
+  height: 6px;
+  background: var(--panel-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22d3ee, #0891b2);
+  border-radius: 999px;
+  transition: width 0.8s ease;
+}
+
+/* Тепловая карта */
+.heatmap-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.heatmap-row-mini {
+  display: flex;
+  gap: 3px;
+}
+
+.heatmap-cell-mini {
+  width: 12px;
+  height: 12px;
+  background: var(--panel-border);
+  border-radius: 2px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.heatmap-cell-mini:hover {
+  transform: scale(1.2);
+  z-index: 10;
+}
+
+.heatmap-cell-mini[data-level="1"] { background: rgba(34, 211, 238, 0.3); }
+.heatmap-cell-mini[data-level="2"] { background: rgba(34, 211, 238, 0.5); }
+.heatmap-cell-mini[data-level="3"] { background: rgba(34, 211, 238, 0.7); }
+.heatmap-cell-mini[data-level="4"] { background: rgba(34, 211, 238, 0.9); }
+.heatmap-cell-mini[data-level="5"] { background: #22d3ee; }
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 10px;
+  color: var(--text-dimmer);
+}
+
+/* Радиальный прогресс */
+.radial-progress {
+  width: 120px;
+  height: 120px;
+  margin: 20px auto;
+  position: relative;
+}
+
+.radial-progress svg {
+  transform: rotate(-90deg);
+}
+
+.radial-bg {
+  fill: none;
+  stroke: var(--panel-border);
+  stroke-width: 10;
+}
+
+.radial-fill {
+  fill: none;
+  stroke: url(#radialGradient);
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke-dasharray 1s ease;
+}
+
+.radial-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.radial-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: var(--font-display);
+}
+
+.radial-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* Горизонтальные бары */
+.horizontal-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.h-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.h-bar-label {
+  width: 70px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.h-bar-track {
+  flex: 1;
+  height: 8px;
+  background: var(--panel-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.h-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22d3ee, #0891b2);
+  border-radius: 999px;
+  transition: width 0.8s ease;
+}
+
+.h-bar-value {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  width: 40px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Info cards */
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.info-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+}
+
+.info-card-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: var(--font-display);
+}
+
+.info-card-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.info-card-trend {
+  font-size: 10px;
+  color: var(--success);
+  font-weight: 600;
+}
+
+/* Timeline */
+.timeline-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.timeline-item-mini {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 4px;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.timeline-content {
+  flex: 1;
+}
+
+.timeline-year {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.timeline-text {
+  font-size: 12px;
+  color: var(--text);
+}
+
+/* Badges */
+.badges-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge-item {
+  padding: 5px 10px;
+  background: var(--accent-soft);
+  border: 1px solid var(--panel-border-strong);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.badge-item:hover {
+  background: var(--accent);
+  color: #04101a;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 900px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-card.full {
+    grid-column: 1;
+  }
+
+  .pie-mini {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  .mini-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="scroll-progress" id="scrollProgress"></div>
+  <div class="header-inner">
+    <div class="brand">
+      <img src="assets/logo-icon.png" alt="Логотип" width="40" height="40" style="border-radius:11px;" />
+      <span>Дмитрий Шиман</span>
+    </div>
+
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Главная</a>
+      <a href="index.html#about">Обо мне</a>
+      <a href="index.html#projects">Проекты</a>
+      <a href="statistics.html" class="active">Статистика</a>
+      <a href="index.html#contact">Контакты</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn" id="themeToggle" aria-label="Переключить тему">
+        <svg viewBox="0 0 24 24" fill="none" width="17" height="17"><path d="M12 3v1M12 20v1M4.2 4.2l.7.7M19.1 19.1l.7.7M3 12h1M20 12h1M4.2 19.8l.7-.7M19.1 4.9l.7-.7M12 8a4 4 0 100 8 4 4 0 000-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn nav-toggle" id="navToggle" aria-label="Меню">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <button class="icon-btn close-btn" id="mobileNavClose" aria-label="Закрыть меню">✕</button>
+  <a href="index.html">Главная</a>
+  <a href="index.html#about">Обо мне</a>
+  <a href="index.html#projects">Проекты</a>
+  <a href="statistics.html">Статистика</a>
+  <a href="index.html#contact">Контакты</a>
+</div>
+
+<main>
+  <section class="stats-hero">
+    <div class="wrap">
+      <span class="badge"><span class="dot"></span>Аналитика и данные</span>
+      <h1>Моя <span class="accent">статистика</span></h1>
+      <p class="lead">Детальные метрики работы, прогресс в разработке и ключевые достижения</p>
+    </div>
+  </section>
+
+  <!-- Компактные мини-метрики -->
+  <section style="padding: 0 0 20px;">
+    <div class="wrap">
+      <div class="mini-stats">
+        <div class="mini-stat">
+          <span class="mini-stat-value" data-count="42">0</span>
+          <span class="mini-stat-label">Завершенных проектов</span>
+        </div>
+        <div class="mini-stat">
+          <span class="mini-stat-value" data-count="15247">0</span>
+          <span class="mini-stat-label">Часов кодинга</span>
+        </div>
+        <div class="mini-stat">
+          <span class="mini-stat-value" data-count="432">0</span>
+          <span class="mini-stat-label">Коммитов на GitHub</span>
+        </div>
+        <div class="mini-stat">
+          <span class="mini-stat-value" data-count="100">0</span>
+          <span class="mini-stat-label">Довольных клиентов</span>
+        </div>
+        <div class="mini-stat">
+          <span class="mini-stat-value" data-count="98">0</span>
+          <span class="mini-stat-label">% успеха проектов</span>
+        </div>
+        <div class="mini-stat">
+          <span class="mini-stat-value" data-count="234">0</span>
+          <span class="mini-stat-label">Баг-фиксов закрыто</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Основные графики -->
+  <section style="padding: 0 0 16px;">
+    <div class="wrap">
+      <div class="charts-grid">
+
+        <!-- Активность по месяцам -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">
+                <span class="chart-icon">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M3 20h18M6 20V10M12 20V4M18 20v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </span>
+                Активность по месяцам
+              </h3>
+              <p class="chart-subtitle">Количество коммитов за каждый месяц 2026 года</p>
+            </div>
+          </div>
+          <div class="bar-chart-mini" id="monthlyActivity"></div>
+        </div>
+
+        <!-- Технологии -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">
+                <span class="chart-icon">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="2"/></svg>
+                </span>
+                Распределение технологий
+              </h3>
+              <p class="chart-subtitle">Процент использования в проектах</p>
+            </div>
+          </div>
+          <div class="pie-mini">
+            <div class="pie-chart-mini">
+              <svg width="140" height="140" id="techPie"></svg>
+            </div>
+            <div class="pie-legend-mini" id="techLegend"></div>
+          </div>
+        </div>
+
+        <!-- Навыки прогресс -->
+        <div class="chart-card small">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">
+                <span class="chart-icon">&lt;/&gt;</span>
+                Уровень владения
+              </h3>
+              <p class="chart-subtitle">Оценка навыков программирования</p>
+            </div>
+          </div>
+          <div class="progress-list" id="skillsProgress"></div>
+        </div>
+
+        <!-- Коммиты по дням недели -->
+        <div class="chart-card small">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">
+                <span class="chart-icon">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M8 2v4M16 2v4M3 10h18" stroke="currentColor" stroke-width="2"/></svg>
+                </span>
+                Активность по дням
+              </h3>
+              <p class="chart-subtitle">Средние коммиты за неделю</p>
+            </div>
+          </div>
+          <div class="horizontal-bars" id="weekdayCommits"></div>
+        </div>
+
+        <!-- Производительность -->
+        <div class="chart-card full">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">
+                <span class="chart-icon">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </span>
+                Производительность за год
+              </h3>
+              <p class="chart-subtitle">Процент выполнения задач по месяцам (2026)</p>
+            </div>
+          </div>
+          <div class="chart-grid-lines">
+            <div class="grid-line"><span class="grid-label">100%</span></div>
+            <div class="grid-line"><span class="grid-label">75%</span></div>
+            <div class="grid-line"><span class="grid-label">50%</span></div>
+            <div class="grid-line"><span class="grid-label">25%</span></div>
+            <div class="grid-line"><span class="grid-label">0%</span></div>
+          </div>
+          <div class="line-chart-mini">
+            <svg width="100%" height="160" id="performanceLine" viewBox="0 0 800 160" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color:#22d3ee;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#22d3ee;stop-opacity:0.3" />
+                  <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:0" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Карта активности -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">
+                <span class="chart-icon">
+                  <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/></svg>
+                </span>
+                Карта активности
+              </h3>
+              <p class="chart-subtitle">Последние 12 недель работы</p>
+            </div>
+          </div>
+          <div class="heatmap-mini" id="activityHeatmap"></div>
+          <div class="heatmap-legend">
+            <span>Меньше</span>
+            <div style="display: flex; gap: 3px;">
+              <div class="heatmap-cell-mini"></div>
+              <div class="heatmap-cell-mini" data-level="1"></div>
+              <div class="heatmap-cell-mini" data-level="2"></div>
+              <div class="heatmap-cell-mini" data-level="3"></div>
+              <div class="heatmap-cell-mini" data-level="4"></div>
+              <div class="heatmap-cell-mini" data-level="5"></div>
+            </div>
+            <span>Больше</span>
+          </div>
+        </div>
+
+        <!-- Языки программирования -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">
+                <span class="chart-icon">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </span>
+                Языки программирования
+              </h3>
+              <p class="chart-subtitle">Часов работы с каждым языком</p>
+            </div>
+          </div>
+          <div class="horizontal-bars" id="languages"></div>
+        </div>
+
+        <!-- Продуктивность -->
+        <div class="chart-card small">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">
+                <span class="chart-icon">
+                  <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2"/></svg>
+                </span>
+                Продуктивность
+              </h3>
+              <p class="chart-subtitle">Общая эффективность работы</p>
+            </div>
+          </div>
+          <div class="radial-progress">
+            <svg width="120" height="120">
+              <defs>
+                <linearGradient id="radialGradient">
+                  <stop offset="0%" stop-color="#22d3ee"/>
+                  <stop offset="100%" stop-color="#0891b2"/>
+                </linearGradient>
+              </defs>
+              <circle class="radial-bg" cx="60" cy="60" r="50"></circle>
+              <circle class="radial-fill" cx="60" cy="60" r="50" id="productivityCircle"></circle>
+            </svg>
+            <div class="radial-center">
+              <div class="radial-value">92%</div>
+              <div class="radial-label">выполнено</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Качество кода -->
+        <div class="chart-card small">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">
+                <span class="chart-icon">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </span>
+                Качество кода
+              </h3>
+              <p class="chart-subtitle">Оценка код-ревью</p>
+            </div>
+          </div>
+          <div class="radial-progress">
+            <svg width="120" height="120">
+              <circle class="radial-bg" cx="60" cy="60" r="50"></circle>
+              <circle class="radial-fill" cx="60" cy="60" r="50" id="qualityCircle"></circle>
+            </svg>
+            <div class="radial-center">
+              <div class="radial-value">95%</div>
+              <div class="radial-label">без замечаний</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">
+                <span class="chart-icon">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M3 12h18M12 3v18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </span>
+                Карьерный путь
+              </h3>
+              <p class="chart-subtitle">Основные вехи развития</p>
+            </div>
+          </div>
+          <div class="timeline-mini">
+            <div class="timeline-item-mini">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-year">2026 — Сейчас</div>
+                <div class="timeline-text">Full-stack разработчик · 42 проекта</div>
+              </div>
+            </div>
+            <div class="timeline-item-mini">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-year">2024 — 2026</div>
+                <div class="timeline-text">Middle разработчик · 28 проектов</div>
+              </div>
+            </div>
+            <div class="timeline-item-mini">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-year">2021 — 2024</div>
+                <div class="timeline-text">Junior разработчик · 15 проектов</div>
+              </div>
+            </div>
+            <div class="timeline-item-mini">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content">
+                <div class="timeline-year">2020</div>
+                <div class="timeline-text">Начало карьеры в IT</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Облако технологий -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">
+                <span class="chart-icon">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M7 20h10M12 4v12m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </span>
+                Стек технологий
+              </h3>
+              <p class="chart-subtitle">Все используемые инструменты</p>
+            </div>
+          </div>
+          <div class="badges-cloud">
+            <span class="badge-item">JavaScript</span>
+            <span class="badge-item">React</span>
+            <span class="badge-item">Node.js</span>
+            <span class="badge-item">TypeScript</span>
+            <span class="badge-item">Python</span>
+            <span class="badge-item">Docker</span>
+            <span class="badge-item">PostgreSQL</span>
+            <span class="badge-item">MongoDB</span>
+            <span class="badge-item">Redis</span>
+            <span class="badge-item">Git</span>
+            <span class="badge-item">AWS</span>
+            <span class="badge-item">GraphQL</span>
+            <span class="badge-item">REST API</span>
+            <span class="badge-item">Vue.js</span>
+            <span class="badge-item">Next.js</span>
+            <span class="badge-item">Express</span>
+            <span class="badge-item">Webpack</span>
+            <span class="badge-item">Jest</span>
+            <span class="badge-item">Tailwind CSS</span>
+            <span class="badge-item">Sass</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Дополнительные метрики -->
+  <section style="padding: 0 0 30px;">
+    <div class="wrap">
+      <div class="info-cards">
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+          </div>
+          <div class="info-card-value" data-count="142">0</div>
+          <div class="info-card-label">Pull Requests созданных</div>
+          <div class="info-card-trend">↑ 24% за квартал</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+          </div>
+          <div class="info-card-value">$30K</div>
+          <div class="info-card-label">Доход от проектов</div>
+          <div class="info-card-trend">↑ 32% за год</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 8v8m-4-4h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="info-card-value" data-count="234">0</div>
+          <div class="info-card-label">Баг-фиксов закрыто</div>
+          <div class="info-card-trend">↑ 18% месяц</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+          </div>
+          <div class="info-card-value" data-count="23">0</div>
+          <div class="info-card-label">Библиотек создано</div>
+          <div class="info-card-trend">↑ 5 за год</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+          </div>
+          <div class="info-card-value" data-count="2847">0</div>
+          <div class="info-card-label">Отзывов получено</div>
+          <div class="info-card-trend">↑ 412 за месяц</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header">
+            <div class="info-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+          </div>
+          <div class="info-card-value" data-count="18">0</div>
+          <div class="info-card-label">Заказов на данный момент</div>
+          <div class="info-card-trend">↑ 2 закрыто за день</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="assets/logo-icon.png" alt="Логотип" />
+        <span>Дмитрий Шиман</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 <span class="studio">Shyman_Studio</span>. Все права защищены.</span>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Наверх">
+  <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<script src="statistics.js?v=2"></script>
+<script>
+// Базовые функции
+const themeToggle = document.getElementById('themeToggle');
+const htmlEl = document.documentElement;
+const currentTheme = localStorage.getItem('theme') || 'dark';
+if (currentTheme === 'light') htmlEl.setAttribute('data-theme', 'light');
+
+themeToggle?.addEventListener('click', () => {
+  const isLight = htmlEl.getAttribute('data-theme') === 'light';
+  htmlEl.setAttribute('data-theme', isLight ? 'dark' : 'light');
+  localStorage.setItem('theme', isLight ? 'dark' : 'light');
+});
+
+const navToggle = document.getElementById('navToggle');
+const mobileNav = document.getElementById('mobileNav');
+const mobileNavClose = document.getElementById('mobileNavClose');
+navToggle?.addEventListener('click', () => mobileNav?.classList.add('open'));
+mobileNavClose?.addEventListener('click', () => mobileNav?.classList.remove('open'));
+
+window.addEventListener('scroll', () => {
+  const scrollProgress = document.getElementById('scrollProgress');
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  if (scrollProgress) scrollProgress.style.width = progress + '%';
+
+  const backToTop = document.getElementById('backToTop');
+  if (backToTop) {
+    if (scrollTop > 300) backToTop.classList.add('show');
+    else backToTop.classList.remove('show');
+  }
+});
+
+document.getElementById('backToTop')?.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>
